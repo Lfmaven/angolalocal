@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Angola - Login</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+</head>
+<body>
+    <header>
+        <h1>API Angola Local</h1>
+    </header>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h2 class="login-title">Entre na sua conta</h2>
+            
+            <div class="error" id="errorLogin"></div>
+            
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="Digite o seu e-mail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite a sua senha" required>
+            </div>
+            
+            <button class="btn" id="loginBtn">Entrar</button>
+            
+            <div class="register-link">
+                <p>Não tem uma conta? <a href="register.html">Registre-se</a></p>
+            </div>
+            
+            <div class="loading" id="loadingLogin">
+                <div class="spinner"></div>
+                <p>Autenticando...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 API Angola Local. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="../static/js/login.js"></script>
+</body>
+</html>

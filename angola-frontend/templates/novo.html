@@ -1,0 +1,1842 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - API Angola</title>
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        
+        .logout-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .dashboard-content {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-right: 20px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+        
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            margin: 0;
+            font-size: 1.4em;
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btns .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .alert-success {
+            background-color: #d5f5e3;
+            color: #27ae60;
+            border: 1px solid #a3e4d7;
+        }
+        
+        .alert-danger {
+            background-color: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #f5b7b1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 600px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            margin: 0;
+            font-size: 1.3em;
+            color: var(--primary-color);
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .dashboard-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Dashboard - API Angola</h1>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-content">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" data-section="provincias"><i class="fas fa-map"></i> Províncias</a></li>
+                    <li><a href="#" data-section="municipios"><i class="fas fa-city"></i> Municípios</a></li>
+                    <li><a href="#" data-section="comunas"><i class="fas fa-map-marker-alt"></i> Comunas</a></li>
+                    <li><a href="#" data-section="usuarios"><i class="fas fa-users"></i> Usuários</a></li>
+                    <li><a href="#" data-section="configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Bem-vindo ao Painel de Administração</h2>
+                        </div>
+                        <div id="user-info">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <p>Carregando informações do usuário...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Estatísticas Rápidas</h2>
+                        </div>
+                        <div id="stats-container">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                <p>Carregando estatísticas...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Províncias Section -->
+                <div id="provincias-section" class="hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Gestão de Províncias</h2>
+                            <button class="btn btn-primary" id="add-provincia-btn"><i class="fas fa-plus"></i> Adicionar Província</button>
+                        </div>
+                        <div id="provincias-alert"></div>
+                        <div id="provincias-loading" class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando províncias...</p>
+                        </div>
+                        <table id="provincias-table" class="hidden">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Código</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="provincias-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Municípios Section -->
+                <div id="municipios-section" class="hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Gestão de Municípios</h2>
+                            <button class="btn btn-primary" id="add-municipio-btn"><i class="fas fa-plus"></i> Adicionar Município</button>
+                        </div>
+                        <div id="municipios-alert"></div>
+                        <div id="municipios-loading" class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando municípios...</p>
+                        </div>
+                        <table id="municipios-table" class="hidden">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Província</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="municipios-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Comunas Section -->
+                <div id="comunas-section" class="hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Gestão de Comunas</h2>
+                            <button class="btn btn-primary" id="add-comuna-btn"><i class="fas fa-plus"></i> Adicionar Comuna</button>
+                        </div>
+                        <div id="comunas-alert"></div>
+                        <div id="comunas-loading" class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando comunas...</p>
+                        </div>
+                        <table id="comunas-table" class="hidden">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Município</th>
+                                    <th>Província</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comunas-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Usuários Section -->
+                <div id="usuarios-section" class="hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Gestão de Usuários</h2>
+                            <button class="btn btn-primary" id="add-usuario-btn"><i class="fas fa-plus"></i> Adicionar Usuário</button>
+                        </div>
+                        <div id="usuarios-alert"></div>
+                        <div id="usuarios-loading" class="loading">
+                            <div class="spinner"></div>
+                            <p>Carregando usuários...</p>
+                        </div>
+                        <table id="usuarios-table" class="hidden">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Admin</th>
+                                    <th>Ativo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usuarios-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Configurações Section -->
+                <div id="configuracoes-section" class="hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Configurações do Sistema</h2>
+                        </div>
+                        <div id="configuracoes-alert"></div>
+                        <form id="config-form">
+                            <div class="form-group">
+                                <label for="api-url">URL da API</label>
+                                <input type="text" id="api-url" name="api-url" placeholder="http://localhost:8000/api">
+                            </div>
+                            <div class="form-group">
+                                <label for="items-per-page">Itens por página</label>
+                                <select id="items-per-page" name="items-per-page">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Província -->
+    <div id="provincia-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="provincia-modal-title">Adicionar Província</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="provincia-form">
+                <input type="hidden" id="provincia-id">
+                <div class="form-group">
+                    <label for="provincia-nome">Nome</label>
+                    <input type="text" id="provincia-nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="provincia-codigo">Código</label>
+                    <input type="text" id="provincia-codigo">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancel-provincia">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Município -->
+    <div id="municipio-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="municipio-modal-title">Adicionar Município</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="municipio-form">
+                <input type="hidden" id="municipio-id">
+                <div class="form-group">
+                    <label for="municipio-nome">Nome</label>
+                    <input type="text" id="municipio-nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="municipio-provincia">Província</label>
+                    <select id="municipio-provincia" required></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancel-municipio">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Comuna -->
+    <div id="comuna-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="comuna-modal-title">Adicionar Comuna</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="comuna-form">
+                <input type="hidden" id="comuna-id">
+                <div class="form-group">
+                    <label for="comuna-nome">Nome</label>
+                    <input type="text" id="comuna-nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="comuna-provincia">Província</label>
+                    <select id="comuna-provincia" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="comuna-municipio">Município</label>
+                    <select id="comuna-municipio" required></select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancel-comuna">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Usuário -->
+    <div id="usuario-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="usuario-modal-title">Adicionar Usuário</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="usuario-form">
+                <input type="hidden" id="usuario-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="usuario-username">Username</label>
+                        <input type="text" id="usuario-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="usuario-email">Email</label>
+                        <input type="email" id="usuario-email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="usuario-password">Password</label>
+                        <input type="password" id="usuario-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="usuario-password-confirm">Confirmar Password</label>
+                        <input type="password" id="usuario-password-confirm">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="usuario-is-staff">Administrador</label>
+                        <select id="usuario-is-staff">
+                            <option value="false">Não</option>
+                            <option value="true">Sim</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="usuario-is-active">Ativo</label>
+                        <select id="usuario-is-active">
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancel-usuario">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="confirm-modal-title">Confirmar Ação</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="confirm-message">
+                Tem certeza que deseja excluir este item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirm-cancel">Cancelar</button>
+                <button type="button" class="btn btn-success" id="confirm-ok">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurações globais
+        const API_BASE_URL = localStorage.getItem('api_url') || 'http://localhost:8000/api';
+        let currentUser = null;
+        let allProvincias = [];
+        let allMunicipios = [];
+        let allComunas = [];
+        let allUsuarios = [];
+        let currentModal = null;
+        let confirmCallback = null;
+        let sessionTimer = null;
+        const SESSION_CHECK_INTERVAL = 300000; // 5 minutos
+
+        // Elementos do DOM
+        const sections = {
+            dashboard: document.getElementById('dashboard-section'),
+            provincias: document.getElementById('provincias-section'),
+            municipios: document.getElementById('municipios-section'),
+            comunas: document.getElementById('comunas-section'),
+            usuarios: document.getElementById('usuarios-section'),
+            configuracoes: document.getElementById('configuracoes-section')
+        };
+
+        const menuLinks = document.querySelectorAll('.sidebar-menu a');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userInfoContainer = document.getElementById('user-info');
+        const statsContainer = document.getElementById('stats-container');
+
+        // Modais
+        const modals = {
+            provincia: document.getElementById('provincia-modal'),
+            municipio: document.getElementById('municipio-modal'),
+            comuna: document.getElementById('comuna-modal'),
+            usuario: document.getElementById('usuario-modal'),
+            confirm: document.getElementById('confirm-modal')
+        };
+
+        // Função para verificar autenticação
+        async function checkAuth() {
+            const token = localStorage.getItem("token");
+            
+            if (!token) {
+                window.location.href = "login.html?error=session_expired";
+                return;
+            }
+
+            try {
+                // Primeiro tenta com o token atual
+                let response = await fetchWithAuth("http://localhost:8000/api/me/", {
+                    method: "GET"
+                });
+
+                // Se falhar, tenta renovar o token
+                if (!response.ok) {
+                    const renewed = await renovarToken();
+                    if (!renewed) throw new Error("Token inválido ou sessão expirada");
+                    
+                    // Tenta novamente com o novo token
+                    response = await fetchWithAuth("http://localhost:8000/api/me/", {
+                        method: "GET"
+                    });
+                    
+                    if (!response.ok) throw new Error("Token inválido ou sessão expirada");
+                }
+
+                const data = await response.json();
+                console.log("Usuário logado:", data);
+                currentUser = data;
+                updateUserInfo();
+                startSessionTimer();
+                
+            } catch (error) {
+                console.error(error);
+                localStorage.removeItem("token");
+                localStorage.removeItem("refresh_token");
+                window.location.href = "login.html?error=session_expired";
+            }
+        }
+
+        // Função wrapper para fetch com tratamento de autenticação
+        async function fetchWithAuth(url, options = {}) {
+            const token = localStorage.getItem("token");
+            
+            // Configura headers padrão
+            options.headers = options.headers || {};
+            options.headers['Content-Type'] = 'application/json';
+            options.headers['Authorization'] = `Bearer ${token}`;
+            
+            // Adiciona timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            options.signal = controller.signal;
+            
+            try {
+                const response = await fetch(url, options);
+                clearTimeout(timeoutId);
+                
+                // Se token expirado, tenta renovar
+                if (response.status === 401) {
+                    const renewed = await renovarToken();
+                    if (!renewed) return response;
+                    
+                    // Tenta novamente com o novo token
+                    options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                    return await fetch(url, options);
+                }
+                
+                return response;
+                
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+
+        async function renovarToken() {
+            const refreshToken = localStorage.getItem("refresh_token");
+
+            if (!refreshToken) return false;
+
+            try {
+                console.log('Tentando renovar token...');
+                const response = await fetch("http://localhost:8000/api/token/refresh/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ refresh: refreshToken })
+                });
+
+                console.log('Status da renovação:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem("token", data.access);
+                    return true;
+                } else {
+                    console.error('Falha ao renovar token:', await response.text());
+                    return false;
+                }
+            } catch (error) {
+                console.error('Erro ao renovar token:', error);
+                return false;
+            }
+        }
+
+        // Inicia o timer para verificar sessão periodicamente
+        function startSessionTimer() {
+            if (sessionTimer) clearInterval(sessionTimer);
+            
+            sessionTimer = setInterval(async () => {
+                try {
+                    const response = await fetchWithAuth("http://localhost:8000/api/me/", {
+                        method: "GET"
+                    });
+                    
+                    if (!response.ok) {
+                        const renewed = await renovarToken();
+                        if (!renewed) {
+                            clearInterval(sessionTimer);
+                            window.location.href = "login.html?error=session_expired";
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar sessão:', error);
+                }
+            }, SESSION_CHECK_INTERVAL);
+        }
+
+        // Atualizar informações do usuário
+        function updateUserInfo() {
+            if (!currentUser) return;
+
+            userInfoContainer.innerHTML = `
+                <div class="${currentUser.is_staff ? 'admin' : 'user'}">
+                    <h3>${currentUser.is_staff ? '<i class="fas fa-shield-alt"></i> Administrador' : '<i class="fas fa-user"></i> Usuário'}: ${currentUser.username}</h3>
+                    <p><strong>Email:</strong> ${currentUser.email || 'N/A'}</p>
+                    <p><strong>Último login:</strong> ${currentUser.last_login ? new Date(currentUser.last_login).toLocaleString() : 'N/A'}</p>
+                </div>
+            `;
+        }
+
+        // Carregar dados iniciais
+        async function loadInitialData() {
+            try {
+                // Carregar estatísticas
+                const statsResponse = await fetchWithAuth(`${API_BASE_URL}/stats/`);
+                
+                if (statsResponse.ok) {
+                    const stats = await statsResponse.json();
+                    updateStats(stats);
+                }
+
+                // Carregar províncias para selects
+                const provinciasResponse = await fetchWithAuth(`${API_BASE_URL}/provincias/`);
+                
+                if (provinciasResponse.ok) {
+                    allProvincias = await provinciasResponse.json();
+                    allProvincias = allProvincias.results || allProvincias;
+                    populateProvinciasSelects();
+                }
+
+                // Carregar municípios para selects
+                const municipiosResponse = await fetchWithAuth(`${API_BASE_URL}/municipios/`);
+                
+                if (municipiosResponse.ok) {
+                    allMunicipios = await municipiosResponse.json();
+                    allMunicipios = allMunicipios.results || allMunicipios;
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar dados iniciais:', error);
+                if (error.message.includes('Sessão expirada')) {
+                    window.location.href = "login.html?error=session_expired";
+                }
+            }
+        }
+
+        // Atualizar estatísticas
+        function updateStats(stats) {
+            statsContainer.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="card" style="background-color: #e8f4f8;">
+                            <h3><i class="fas fa-map"></i> Províncias</h3>
+                            <p style="font-size: 24px; font-weight: bold; text-align: center;">${stats.provincias || 0}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="card" style="background-color: #e8f8f4;">
+                            <h3><i class="fas fa-city"></i> Municípios</h3>
+                            <p style="font-size: 24px; font-weight: bold; text-align: center;">${stats.municipios || 0}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="card" style="background-color: #f8f4e8;">
+                            <h3><i class="fas fa-map-marker-alt"></i> Comunas</h3>
+                            <p style="font-size: 24px; font-weight: bold; text-align: center;">${stats.comunas || 0}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="card" style="background-color: #f4e8f8;">
+                            <h3><i class="fas fa-users"></i> Usuários</h3>
+                            <p style="font-size: 24px; font-weight: bold; text-align: center;">${stats.usuarios || 0}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Preencher selects de províncias
+        function populateProvinciasSelects() {
+            const provinciaSelects = [
+                document.getElementById('municipio-provincia'),
+                document.getElementById('comuna-provincia')
+            ];
+
+            provinciaSelects.forEach(select => {
+                if (select) {
+                    select.innerHTML = '<option value="">Selecione uma província</option>';
+                    allProvincias.forEach(provincia => {
+                        select.innerHTML += `<option value="${provincia.id}">${provincia.nome}</option>`;
+                    });
+                }
+            });
+        }
+
+        // Carregar municípios baseado na província selecionada
+        async function loadMunicipiosForComuna(provinciaId) {
+            const municipioSelect = document.getElementById('comuna-municipio');
+            
+            try {
+                const response = await fetchWithAuth(`${API_BASE_URL}/municipios/?provincia=${provinciaId}`);
+                
+                if (response.ok) {
+                    let municipios = await response.json();
+                    municipios = municipios.results || municipios;
+                    
+                    municipioSelect.innerHTML = '<option value="">Selecione um município</option>';
+                    municipios.forEach(municipio => {
+                        municipioSelect.innerHTML += `<option value="${municipio.id}">${municipio.nome}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar municípios:', error);
+            }
+        }
+
+        // Mostrar seção
+        function showSection(sectionId) {
+            // Esconder todas as seções
+            Object.values(sections).forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Mostrar a seção selecionada
+            sections[sectionId].classList.remove('hidden');
+            
+            // Atualizar menu ativo
+            menuLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Carregar dados da seção se necessário
+            switch(sectionId) {
+                case 'provincias':
+                    loadProvincias();
+                    break;
+                case 'municipios':
+                    loadMunicipios();
+                    break;
+                case 'comunas':
+                    loadComunas();
+                    break;
+                case 'usuarios':
+                    if (currentUser?.is_staff) {
+                        loadUsuarios();
+                    } else {
+                        showAlert('usuarios-alert', 'Acesso negado. Somente administradores podem gerenciar usuários.', 'danger');
+                    }
+                    break;
+            }
+        }
+
+        // Funções para carregar dados das tabelas
+        async function loadProvincias() {
+            const loadingElement = document.getElementById('provincias-loading');
+            const tableElement = document.getElementById('provincias-table');
+            const tbodyElement = document.getElementById('provincias-tbody');
+            
+            try {
+                loadingElement.classList.remove('hidden');
+                tableElement.classList.add('hidden');
+                
+                const response = await fetch(`${API_BASE_URL}/provincias/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allProvincias = data.results || data;
+                    
+                    tbodyElement.innerHTML = '';
+                    allProvincias.forEach(provincia => {
+                        tbodyElement.innerHTML += `
+                            <tr>
+                                <td>${provincia.id}</td>
+                                <td>${provincia.nome}</td>
+                                <td>${provincia.codigo || 'N/A'}</td>
+                                <td class="action-btns">
+                                    <button class="btn btn-warning btn-edit-provincia" data-id="${provincia.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-delete-provincia" data-id="${provincia.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    // Adicionar event listeners aos botões
+                    document.querySelectorAll('.btn-edit-provincia').forEach(btn => {
+                        btn.addEventListener('click', () => editProvincia(btn.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.btn-delete-provincia').forEach(btn => {
+                        btn.addEventListener('click', () => deleteProvincia(btn.dataset.id));
+                    });
+                    
+                    tableElement.classList.remove('hidden');
+                } else {
+                    throw new Error('Erro ao carregar províncias');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('provincias-alert', 'Erro ao carregar províncias. Tente novamente.', 'danger');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        async function loadMunicipios() {
+            const loadingElement = document.getElementById('municipios-loading');
+            const tableElement = document.getElementById('municipios-table');
+            const tbodyElement = document.getElementById('municipios-tbody');
+            
+            try {
+                loadingElement.classList.remove('hidden');
+                tableElement.classList.add('hidden');
+                
+                const response = await fetch(`${API_BASE_URL}/municipios/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allMunicipios = data.results || data;
+                    
+                    tbodyElement.innerHTML = '';
+                    allMunicipios.forEach(municipio => {
+                        const provincia = allProvincias.find(p => p.id === municipio.provincia) || { nome: 'N/A' };
+                        
+                        tbodyElement.innerHTML += `
+                            <tr>
+                                <td>${municipio.id}</td>
+                                <td>${municipio.nome}</td>
+                                <td>${provincia.nome}</td>
+                                <td class="action-btns">
+                                    <button class="btn btn-warning btn-edit-municipio" data-id="${municipio.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-delete-municipio" data-id="${municipio.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    // Adicionar event listeners aos botões
+                    document.querySelectorAll('.btn-edit-municipio').forEach(btn => {
+                        btn.addEventListener('click', () => editMunicipio(btn.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.btn-delete-municipio').forEach(btn => {
+                        btn.addEventListener('click', () => deleteMunicipio(btn.dataset.id));
+                    });
+                    
+                    tableElement.classList.remove('hidden');
+                } else {
+                    throw new Error('Erro ao carregar municípios');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('municipios-alert', 'Erro ao carregar municípios. Tente novamente.', 'danger');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        async function loadComunas() {
+            const loadingElement = document.getElementById('comunas-loading');
+            const tableElement = document.getElementById('comunas-table');
+            const tbodyElement = document.getElementById('comunas-tbody');
+            
+            try {
+                loadingElement.classList.remove('hidden');
+                tableElement.classList.add('hidden');
+                
+                const response = await fetch(`${API_BASE_URL}/comunas/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allComunas = data.results || data;
+                    
+                    tbodyElement.innerHTML = '';
+                    allComunas.forEach(comuna => {
+                        const municipio = allMunicipios.find(m => m.id === comuna.municipio) || { nome: 'N/A', provincia: 'N/A' };
+                        const provincia = allProvincias.find(p => p.id === municipio.provincia) || { nome: 'N/A' };
+                        
+                        tbodyElement.innerHTML += `
+                            <tr>
+                                <td>${comuna.id}</td>
+                                <td>${comuna.nome}</td>
+                                <td>${municipio.nome}</td>
+                                <td>${provincia.nome}</td>
+                                <td class="action-btns">
+                                    <button class="btn btn-warning btn-edit-comuna" data-id="${comuna.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-delete-comuna" data-id="${comuna.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    // Adicionar event listeners aos botões
+                    document.querySelectorAll('.btn-edit-comuna').forEach(btn => {
+                        btn.addEventListener('click', () => editComuna(btn.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.btn-delete-comuna').forEach(btn => {
+                        btn.addEventListener('click', () => deleteComuna(btn.dataset.id));
+                    });
+                    
+                    tableElement.classList.remove('hidden');
+                } else {
+                    throw new Error('Erro ao carregar comunas');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('comunas-alert', 'Erro ao carregar comunas. Tente novamente.', 'danger');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        async function loadUsuarios() {
+            if (!currentUser.is_staff) return;
+            
+            const loadingElement = document.getElementById('usuarios-loading');
+            const tableElement = document.getElementById('usuarios-table');
+            const tbodyElement = document.getElementById('usuarios-tbody');
+            
+            try {
+                loadingElement.classList.remove('hidden');
+                tableElement.classList.add('hidden');
+                
+                const response = await fetch(`${API_BASE_URL}/users/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allUsuarios = data.results || data;
+                    
+                    tbodyElement.innerHTML = '';
+                    allUsuarios.forEach(usuario => {
+                        tbodyElement.innerHTML += `
+                            <tr>
+                                <td>${usuario.id}</td>
+                                <td>${usuario.username}</td>
+                                <td>${usuario.email || 'N/A'}</td>
+                                <td>${usuario.is_staff ? 'Sim' : 'Não'}</td>
+                                <td>${usuario.is_active ? 'Sim' : 'Não'}</td>
+                                <td class="action-btns">
+                                    <button class="btn btn-warning btn-edit-usuario" data-id="${usuario.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-delete-usuario" data-id="${usuario.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    // Adicionar event listeners aos botões
+                    document.querySelectorAll('.btn-edit-usuario').forEach(btn => {
+                        btn.addEventListener('click', () => editUsuario(btn.dataset.id));
+                    });
+                    
+                    document.querySelectorAll('.btn-delete-usuario').forEach(btn => {
+                        btn.addEventListener('click', () => deleteUsuario(btn.dataset.id));
+                    });
+                    
+                    tableElement.classList.remove('hidden');
+                } else {
+                    throw new Error('Erro ao carregar usuários');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('usuarios-alert', 'Erro ao carregar usuários. Tente novamente.', 'danger');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        // Funções para adicionar/editar itens
+        function addProvincia() {
+            document.getElementById('provincia-id').value = '';
+            document.getElementById('provincia-nome').value = '';
+            document.getElementById('provincia-codigo').value = '';
+            document.getElementById('provincia-modal-title').textContent = 'Adicionar Província';
+            openModal('provincia');
+        }
+
+        async function editProvincia(id) {
+            const provincia = allProvincias.find(p => p.id == id);
+            if (!provincia) return;
+            
+            document.getElementById('provincia-id').value = provincia.id;
+            document.getElementById('provincia-nome').value = provincia.nome;
+            document.getElementById('provincia-codigo').value = provincia.codigo || '';
+            document.getElementById('provincia-modal-title').textContent = 'Editar Província';
+            openModal('provincia');
+        }
+
+        function addMunicipio() {
+            document.getElementById('municipio-id').value = '';
+            document.getElementById('municipio-nome').value = '';
+            document.getElementById('municipio-provincia').value = '';
+            document.getElementById('municipio-modal-title').textContent = 'Adicionar Município';
+            openModal('municipio');
+        }
+
+        async function editMunicipio(id) {
+            const municipio = allMunicipios.find(m => m.id == id);
+            if (!municipio) return;
+            
+            document.getElementById('municipio-id').value = municipio.id;
+            document.getElementById('municipio-nome').value = municipio.nome;
+            document.getElementById('municipio-provincia').value = municipio.provincia;
+            document.getElementById('municipio-modal-title').textContent = 'Editar Município';
+            openModal('municipio');
+        }
+
+        function addComuna() {
+            document.getElementById('comuna-id').value = '';
+            document.getElementById('comuna-nome').value = '';
+            document.getElementById('comuna-provincia').value = '';
+            document.getElementById('comuna-municipio').innerHTML = '<option value="">Selecione um município</option>';
+            document.getElementById('comuna-modal-title').textContent = 'Adicionar Comuna';
+            openModal('comuna');
+        }
+
+        async function editComuna(id) {
+            const comuna = allComunas.find(c => c.id == id);
+            if (!comuna) return;
+            
+            document.getElementById('comuna-id').value = comuna.id;
+            document.getElementById('comuna-nome').value = comuna.nome;
+            
+            // Primeiro seleciona a província
+            const municipio = allMunicipios.find(m => m.id == comuna.municipio);
+            if (municipio) {
+                document.getElementById('comuna-provincia').value = municipio.provincia;
+                
+                // Carrega os municípios para essa província
+                await loadMunicipiosForComuna(municipio.provincia);
+                
+                // Depois seleciona o município
+                setTimeout(() => {
+                    document.getElementById('comuna-municipio').value = comuna.municipio;
+                }, 100);
+            }
+            
+            document.getElementById('comuna-modal-title').textContent = 'Editar Comuna';
+            openModal('comuna');
+        }
+
+        function addUsuario() {
+            if (!currentUser.is_staff) return;
+            
+            document.getElementById('usuario-id').value = '';
+            document.getElementById('usuario-username').value = '';
+            document.getElementById('usuario-email').value = '';
+            document.getElementById('usuario-password').value = '';
+            document.getElementById('usuario-password-confirm').value = '';
+            document.getElementById('usuario-is-staff').value = 'false';
+            document.getElementById('usuario-is-active').value = 'true';
+            document.getElementById('usuario-modal-title').textContent = 'Adicionar Usuário';
+            openModal('usuario');
+        }
+
+        async function editUsuario(id) {
+            if (!currentUser.is_staff) return;
+            
+            const usuario = allUsuarios.find(u => u.id == id);
+            if (!usuario) return;
+            
+            document.getElementById('usuario-id').value = usuario.id;
+            document.getElementById('usuario-username').value = usuario.username;
+            document.getElementById('usuario-email').value = usuario.email || '';
+            document.getElementById('usuario-password').value = '';
+            document.getElementById('usuario-password-confirm').value = '';
+            document.getElementById('usuario-is-staff').value = usuario.is_staff ? 'true' : 'false';
+            document.getElementById('usuario-is-active').value = usuario.is_active ? 'true' : 'false';
+            document.getElementById('usuario-modal-title').textContent = 'Editar Usuário';
+            openModal('usuario');
+        }
+
+        // Funções para salvar itens
+        async function saveProvincia(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('provincia-id').value;
+            const nome = document.getElementById('provincia-nome').value;
+            const codigo = document.getElementById('provincia-codigo').value;
+            
+            const provinciaData = {
+                nome: nome,
+                codigo: codigo || null
+            };
+            
+            try {
+                let response;
+                
+                if (id) {
+                    // Editar
+                    response = await fetch(`${API_BASE_URL}/provincias/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(provinciaData)
+                    });
+                } else {
+                    // Adicionar
+                    response = await fetch(`${API_BASE_URL}/provincias/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(provinciaData)
+                    });
+                }
+                
+                if (response.ok) {
+                    closeModal('provincia');
+                    showAlert('provincias-alert', `Província ${id ? 'atualizada' : 'adicionada'} com sucesso!`, 'success');
+                    loadProvincias();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao salvar província');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('provincias-alert', error.message, 'danger');
+            }
+        }
+
+        async function saveMunicipio(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('municipio-id').value;
+            const nome = document.getElementById('municipio-nome').value;
+            const provinciaId = document.getElementById('municipio-provincia').value;
+            
+            const municipioData = {
+                nome: nome,
+                provincia: provinciaId
+            };
+            
+            try {
+                let response;
+                
+                if (id) {
+                    // Editar
+                    response = await fetch(`${API_BASE_URL}/municipios/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(municipioData)
+                    });
+                } else {
+                    // Adicionar
+                    response = await fetch(`${API_BASE_URL}/municipios/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(municipioData)
+                    });
+                }
+                
+                if (response.ok) {
+                    closeModal('municipio');
+                    showAlert('municipios-alert', `Município ${id ? 'atualizado' : 'adicionado'} com sucesso!`, 'success');
+                    loadMunicipios();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao salvar município');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('municipios-alert', error.message, 'danger');
+            }
+        }
+
+        async function saveComuna(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('comuna-id').value;
+            const nome = document.getElementById('comuna-nome').value;
+            const municipioId = document.getElementById('comuna-municipio').value;
+            
+            const comunaData = {
+                nome: nome,
+                municipio: municipioId
+            };
+            
+            try {
+                let response;
+                
+                if (id) {
+                    // Editar
+                    response = await fetch(`${API_BASE_URL}/comunas/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(comunaData)
+                    });
+                } else {
+                    // Adicionar
+                    response = await fetch(`${API_BASE_URL}/comunas/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(comunaData)
+                    });
+                }
+                
+                if (response.ok) {
+                    closeModal('comuna');
+                    showAlert('comunas-alert', `Comuna ${id ? 'atualizada' : 'adicionada'} com sucesso!`, 'success');
+                    loadComunas();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao salvar comuna');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('comunas-alert', error.message, 'danger');
+            }
+        }
+
+        async function saveUsuario(e) {
+            e.preventDefault();
+            
+            if (!currentUser.is_staff) return;
+            
+            const id = document.getElementById('usuario-id').value;
+            const username = document.getElementById('usuario-username').value;
+            const email = document.getElementById('usuario-email').value;
+            const password = document.getElementById('usuario-password').value;
+            const passwordConfirm = document.getElementById('usuario-password-confirm').value;
+            const isStaff = document.getElementById('usuario-is-staff').value === 'true';
+            const isActive = document.getElementById('usuario-is-active').value === 'true';
+            
+            if (password && password !== passwordConfirm) {
+                showAlert('usuarios-alert', 'As senhas não coincidem!', 'danger');
+                return;
+            }
+            
+            const usuarioData = {
+                username: username,
+                email: email,
+                is_staff: isStaff,
+                is_active: isActive
+            };
+            
+            if (password) {
+                usuarioData.password = password;
+            }
+            
+            try {
+                let response;
+                
+                if (id) {
+                    // Editar
+                    response = await fetch(`${API_BASE_URL}/users/${id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(usuarioData)
+                    });
+                } else {
+                    // Adicionar
+                    if (!password) {
+                        showAlert('usuarios-alert', 'É necessário definir uma senha para novo usuário!', 'danger');
+                        return;
+                    }
+                    
+                    response = await fetch(`${API_BASE_URL}/users/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify(usuarioData)
+                    });
+                }
+                
+                if (response.ok) {
+                    closeModal('usuario');
+                    showAlert('usuarios-alert', `Usuário ${id ? 'atualizado' : 'adicionado'} com sucesso!`, 'success');
+                    loadUsuarios();
+                    loadInitialData(); // Atualiza estatísticas
+                    
+                    // Se o usuário editado for o próprio usuário logado, recarrega as informações
+                    const usuarioAtualizado = await response.json();
+                    if (usuarioAtualizado.id === currentUser.id) {
+                        currentUser = usuarioAtualizado;
+                        updateUserInfo();
+                    }
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || JSON.stringify(errorData));
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('usuarios-alert', error.message, 'danger');
+            }
+        }
+
+        // Funções para deletar itens
+        async function deleteProvincia(id) {
+            try {
+                const confirm = await showConfirm('Tem certeza que deseja excluir esta província? Todos os municípios e comunas associados também serão removidos.');
+                if (!confirm) return;
+                
+                const response = await fetch(`${API_BASE_URL}/provincias/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showAlert('provincias-alert', 'Província excluída com sucesso!', 'success');
+                    loadProvincias();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao excluir província');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('provincias-alert', error.message, 'danger');
+            }
+        }
+
+        async function deleteMunicipio(id) {
+            try {
+                const confirm = await showConfirm('Tem certeza que deseja excluir este município? Todas as comunas associadas também serão removidas.');
+                if (!confirm) return;
+                
+                const response = await fetch(`${API_BASE_URL}/municipios/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showAlert('municipios-alert', 'Município excluído com sucesso!', 'success');
+                    loadMunicipios();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao excluir município');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('municipios-alert', error.message, 'danger');
+            }
+        }
+
+        async function deleteComuna(id) {
+            try {
+                const confirm = await showConfirm('Tem certeza que deseja excluir esta comuna?');
+                if (!confirm) return;
+                
+                const response = await fetch(`${API_BASE_URL}/comunas/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showAlert('comunas-alert', 'Comuna excluída com sucesso!', 'success');
+                    loadComunas();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao excluir comuna');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('comunas-alert', error.message, 'danger');
+            }
+        }
+
+        async function deleteUsuario(id) {
+            if (!currentUser.is_staff) return;
+            
+            try {
+                // Não permitir que o usuário se delete
+                if (id == currentUser.id) {
+                    showAlert('usuarios-alert', 'Você não pode excluir a si mesmo!', 'danger');
+                    return;
+                }
+                
+                const confirm = await showConfirm('Tem certeza que deseja excluir este usuário?');
+                if (!confirm) return;
+                
+                const response = await fetch(`${API_BASE_URL}/users/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showAlert('usuarios-alert', 'Usuário excluído com sucesso!', 'success');
+                    loadUsuarios();
+                    loadInitialData(); // Atualiza estatísticas
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao excluir usuário');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('usuarios-alert', error.message, 'danger');
+            }
+        }
+
+        // Funções para manipulação de modais
+        function openModal(modalName) {
+            currentModal = modalName;
+            modals[modalName].style.display = 'block';
+        }
+
+        function closeModal(modalName) {
+            modals[modalName].style.display = 'none';
+            currentModal = null;
+        }
+
+        async function showConfirm(message) {
+            return new Promise((resolve) => {
+                document.getElementById('confirm-message').textContent = message;
+                confirmCallback = resolve;
+                openModal('confirm');
+            });
+        }
+
+        // Função para mostrar alertas
+        function showAlert(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            
+            // Remove o alerta após 5 segundos
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            
+            // Menu lateral
+            menuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection(link.dataset.section);
+                });
+            });
+            
+            // Botão de logout
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            });
+            
+            // Botões de adicionar
+            document.getElementById('add-provincia-btn').addEventListener('click', addProvincia);
+            document.getElementById('add-municipio-btn').addEventListener('click', addMunicipio);
+            document.getElementById('add-comuna-btn').addEventListener('click', addComuna);
+            document.getElementById('add-usuario-btn').addEventListener('click', addUsuario);
+            
+            // Formulários
+            document.getElementById('provincia-form').addEventListener('submit', saveProvincia);
+            document.getElementById('municipio-form').addEventListener('submit', saveMunicipio);
+            document.getElementById('comuna-form').addEventListener('submit', saveComuna);
+            document.getElementById('usuario-form').addEventListener('submit', saveUsuario);
+            
+            // Fechar modais ao clicar no X
+            document.querySelectorAll('.modal .close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', () => {
+                    closeModal(currentModal);
+                });
+            });
+            
+            // Fechar modais ao clicar fora
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(currentModal);
+                }
+            });
+            
+            // Botões de cancelar
+            document.getElementById('cancel-provincia').addEventListener('click', () => closeModal('provincia'));
+            document.getElementById('cancel-municipio').addEventListener('click', () => closeModal('municipio'));
+            document.getElementById('cancel-comuna').addEventListener('click', () => closeModal('comuna'));
+            document.getElementById('cancel-usuario').addEventListener('click', () => closeModal('usuario'));
+            
+            // Botões de confirmação
+            document.getElementById('confirm-cancel').addEventListener('click', () => {
+                if (confirmCallback) confirmCallback(false);
+                closeModal('confirm');
+            });
+            
+            document.getElementById('confirm-ok').addEventListener('click', () => {
+                if (confirmCallback) confirmCallback(true);
+                closeModal('confirm');
+            });
+            
+            // Carregar municípios quando selecionar uma província (para comunas)
+            document.getElementById('comuna-provincia').addEventListener('change', async (e) => {
+                if (e.target.value) {
+                    await loadMunicipiosForComuna(e.target.value);
+                } else {
+                    document.getElementById('comuna-municipio').innerHTML = '<option value="">Selecione um município</option>';
+                }
+            });
+            
+            // Configurações
+            document.getElementById('config-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const apiUrl = document.getElementById('api-url').value;
+                const itemsPerPage = document.getElementById('items-per-page').value;
+                
+                localStorage.setItem('api_url', apiUrl);
+                localStorage.setItem('items_per_page', itemsPerPage);
+                
+                showAlert('configuracoes-alert', 'Configurações salvas com sucesso!', 'success');
+            });
+            
+            // Carregar configurações salvas
+            if (localStorage.getItem('api_url')) {
+                document.getElementById('api-url').value = localStorage.getItem('api_url');
+            }
+            
+            if (localStorage.getItem('items_per_page')) {
+                document.getElementById('items-per-page').value = localStorage.getItem('items_per_page');
+            }
+        });
+    </script>
+</body>
+</html>
